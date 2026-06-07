@@ -195,7 +195,7 @@ export function Chat({ messages, onSendMessage, onAvatarClick }: ChatProps) {
                   <div 
                     className="w-8 h-8 rounded-full flex-shrink-0 overflow-hidden border border-[#374151] cursor-pointer" 
                     style={{ backgroundColor: msg.color }}
-                    onClick={() => typeof onAvatarClick === 'function' && onAvatarClick({ uid: msg.userId, username: msg.username, avatar: msg.avatar, isCreator: msg.isCreator })}
+                    onClick={() => typeof onAvatarClick === 'function' && onAvatarClick({ uid: msg.userUid || msg.userId, username: msg.username, avatar: msg.avatar, isCreator: msg.isCreator })}
                   >
                      {msg.avatar ? (
                        <img src={msg.avatar} alt="avatar" className="w-full h-full object-cover" />
@@ -210,7 +210,7 @@ export function Chat({ messages, onSendMessage, onAvatarClick }: ChatProps) {
                       <span 
                         className="text-xs font-bold cursor-pointer hover:underline" 
                         style={{ color: msg.color }}
-                        onClick={() => typeof onAvatarClick === 'function' && onAvatarClick({ uid: msg.userId, username: msg.username, avatar: msg.avatar, isCreator: msg.isCreator })}
+                        onClick={() => typeof onAvatarClick === 'function' && onAvatarClick({ uid: msg.userUid || msg.userId, username: msg.username, avatar: msg.avatar, isCreator: msg.isCreator })}
                       >
                         {msg.username}
                       </span>

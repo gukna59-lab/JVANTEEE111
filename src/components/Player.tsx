@@ -16,7 +16,7 @@ interface PlayerProps {
   onPlayStateChange: (isPlaying: boolean, timestamp: number) => void;
   onSeek: (timestamp: number) => void;
   onForceSync: () => void;
-  onReportProgress: (timestamp: number) => void;
+  onReportProgress: (timestamp: number, duration?: number) => void;
   onTransferAdmin: (userId: string) => void;
   onKickUser: (userId: string) => void;
   usersProgress: Record<string, number>;
@@ -152,11 +152,11 @@ export function Player({
       if (playerRef.current) {
         const time = getPlayerTime();
         if (time !== null) {
+          const nextDuration = getPlayerDuration();
           if (!isCustomPlayer) {
-             onReportProgress(time);
+             onReportProgress(time, nextDuration !== null && Number.isFinite(nextDuration) ? nextDuration : 0);
           }
           if (!isDraggingSeek) setCurrentTime(time);
-          const nextDuration = getPlayerDuration();
           if (nextDuration !== null && Number.isFinite(nextDuration) && nextDuration > 0) setDuration(nextDuration);
         }
       }

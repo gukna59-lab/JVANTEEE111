@@ -81,6 +81,7 @@ async function startServer() {
   interface Message {
     id: string;
     userId: string;
+    userUid?: string;
     username: string;
     avatar?: string;
     color: string;
@@ -220,6 +221,35 @@ async function startServer() {
     
     localDb.saveUsers();
     res.json({ success: true, user: { uid: user.uid, username: user.username, login: user.login, avatar: user.avatar, description: user.description, country: user.country, friends: user.friends || [], isCreator: user.login === '123456' } });
+  });
+
+  app.post('/api/users/:uid/history', (req, res) => {
+    const { title, url, timestamp, time, duration } = req.body;
+    const user = localDb.users[req.params.uid];
+    if (!user) return res.status(404).json({ error: 'Пользователь не найден' });
+    
+    if (!user.runHistory) {
+       user.runHistory = [];
+    }
+    
+    // Remove if already exists to put it at the top
+    user.runHistory = user.runHistory.filter((item: any) => item.title !== title);
+    
+    user.runHistory.unshift({
+       title,
+       url,
+       timestamp: timestamp || Date.now(),
+       time: time || 0,
+       duration: duration || 0
+    });
+    
+    // Keep only last 50 items
+    if (user.runHistory.length > 50) {
+       user.runHistory = user.runHistory.slice(0, 50);
+    }
+    
+    localDb.saveUsers();
+    res.json({ success: true, runHistory: user.runHistory });
   });
 
   app.get('/api/users/search/:username', (req, res) => {
@@ -1136,7 +1166,8 @@ async function startServer() {
 
       const message: Message = {
         id: Math.random().toString(36).substring(2, 9),
-        userId: socket.id,
+        userId: currentUser.uid || socket.id,
+        userUid: currentUser.uid,
         username: currentUser.username,
         avatar: currentUser.avatar,
         color: currentUser.color,

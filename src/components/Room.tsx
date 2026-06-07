@@ -216,7 +216,27 @@ export function Room({ roomId, roomName, username, uid, avatar, onLeave, isPubli
   const handleSeek = (timestamp: number) => socket.emit('seek', timestamp);
   const handleForceSync = () => socket.emit('force_sync');
   const handleTransferAdmin = (userId: string) => socket.emit('transfer_admin', userId);
-  const handleReportProgress = (timestamp: number) => socket.emit('report_progress', timestamp);
+  const lastHistorySync = React.useRef<number>(0);
+  
+  const handleReportProgress = (timestamp: number, duration?: number) => {
+     socket.emit('report_progress', timestamp);
+     if (uid && roomState?.videoUrl) {
+         const now = Date.now();
+         if (now - lastHistorySync.current > 10000) {
+             lastHistorySync.current = now;
+             fetch(`/api/users/${uid}/history`, {
+                 method: 'POST',
+                 headers: { 'Content-Type': 'application/json' },
+                 body: JSON.stringify({
+                     title: roomState.videoTitle || roomState.videoUrl,
+                     url: roomState.videoUrl,
+                     time: timestamp,
+                     duration: duration || 0
+                 })
+             }).catch(e => console.error("Error saving history:", e));
+         }
+     }
+  };
   const handleSendMessage = (text: string, type: string = 'text', mediaUrl?: string) => socket.emit('send_chat', { text, type, mediaUrl });
   const handleKickUser = (userId: string) => socket.emit('kick_user', userId);
   const handleSendReaction = (emoji: string) => socket.emit('send_reaction', emoji);
@@ -452,6 +472,35 @@ export function Room({ roomId, roomName, username, uid, avatar, onLeave, isPubli
                     </h2>
                   </div>
                   
+                  {(viewingUser.runHistory && viewingUser.runHistory.length > 0) && (
+                     <div className="bg-bg-main p-4 rounded-xl border border-border-card relative z-10 mt-4">
+                        <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 flex items-center gap-1">Недавно смотрел</p>
+                        <div className="space-y-2 max-h-32 overflow-y-auto custom-scrollbar pr-1">
+                           {viewingUser.runHistory.map((item: any, i: number) => {
+                              const progress = item.duration > 0 ? (item.time / item.duration) * 100 : 0;
+                              const formatDuration = (seconds: number) => {
+                                 if (!seconds || isNaN(seconds)) return '0:00';
+                                 const m = Math.floor(seconds / 60);
+                                 const s = Math.floor(seconds % 60);
+                                 return `${m}:${s.toString().padStart(2, '0')}`;
+                              };
+                              return (
+                                 <div key={i} title={item.url ? `Ссылка: ${item.url}` : undefined} className="flex flex-col gap-1 text-sm bg-bg-hover hover:bg-bg-card p-3 rounded-lg border border-border-card transition-colors cursor-default">
+                                    <div className="flex gap-2 items-center">
+                                       <span className="text-[10px] text-zinc-500 font-medium whitespace-nowrap bg-zinc-800/50 px-1.5 py-0.5 rounded">{formatDuration(item.time)} / {formatDuration(item.duration)}</span>
+                                       <span className="text-zinc-200 truncate font-medium flex-1 text-xs" title={item.title}>{item.title}</span>
+                                    </div>
+                                    {(item.time > 0 || item.duration > 0) && (
+                                       <div className="w-full bg-zinc-800 rounded-full h-1 mt-1 overflow-hidden">
+                                          <div className="bg-blue-500 h-1 rounded-full" style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}></div>
+                                       </div>
+                                    )}
+                                 </div>
+                              );
+                           })}
+                        </div>
+                     </div>
+                  )}
                   {(viewingUser.description || viewingUser.country) && (
                     <div className="space-y-3 mt-4 relative z-10">
                        {viewingUser.country && (

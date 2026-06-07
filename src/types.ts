@@ -11,6 +11,7 @@ export interface User {
 export interface Message {
   id: string;
   userId: string;
+  userUid?: string;
   username: string;
   avatar?: string;
   color: string;

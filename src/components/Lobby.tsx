@@ -744,14 +744,36 @@ export function Lobby({ onJoin, onWatchAnime, user, defaultUsername, defaultAvat
                   {(viewingUser.runHistory && viewingUser.runHistory.length > 0) && (
                      <div className="bg-bg-main p-4 rounded-xl border border-border-card">
                         <p className="text-xs font-semibold text-zinc-500 uppercase tracking-widest flex items-center gap-1 mb-2"><Clock className="w-3 h-3" /> Недавно смотрел</p>
-                        <div className="space-y-2 max-h-32 overflow-y-auto custom-scrollbar pr-1">
-                           {viewingUser.runHistory.map((item: any, i: number) => (
-                              <div key={i} className="flex gap-2 text-sm items-center hover:bg-bg-hover p-2 rounded-md transition-colors cursor-default">
-                                 <MonitorPlay className="w-4 h-4 text-zinc-400 shrink-0" />
-                                 <span className="text-zinc-300 truncate font-medium flex-1">{item.title}</span>
-                                 <span className="text-xs text-zinc-500 whitespace-nowrap">{timeAgo(item.timestamp)}</span>
-                              </div>
-                           ))}
+                        <div className="space-y-3 max-h-48 overflow-y-auto custom-scrollbar pr-1">
+                           {viewingUser.runHistory.map((item: any, i: number) => {
+                              const progress = item.duration > 0 ? (item.time / item.duration) * 100 : 0;
+                              const formatDuration = (seconds: number) => {
+                                 if (!seconds || isNaN(seconds)) return '0:00';
+                                 const m = Math.floor(seconds / 60);
+                                 const s = Math.floor(seconds % 60);
+                                 return `${m}:${s.toString().padStart(2, '0')}`;
+                              };
+                              return (
+                                 <div key={i} title={item.url ? `Ссылка: ${item.url}` : undefined} className="flex flex-col gap-1 text-sm bg-bg-hover hover:bg-bg-card p-3 rounded-lg border border-border-card transition-colors cursor-default">
+                                    <div className="flex gap-2 items-center">
+                                       <MonitorPlay className="w-4 h-4 text-blue-400 shrink-0" />
+                                       <span className="text-zinc-200 truncate font-medium flex-1" title={item.title}>{item.title}</span>
+                                       <span className="text-[10px] text-zinc-500 whitespace-nowrap">{timeAgo(item.timestamp)}</span>
+                                    </div>
+                                    {(item.time > 0 || item.duration > 0) && (
+                                       <div className="flex flex-col gap-1 mt-1">
+                                          <div className="w-full bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+                                             <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}></div>
+                                          </div>
+                                          <div className="flex justify-between text-[10px] text-zinc-400 font-mono">
+                                             <span>Остановился на: {formatDuration(item.time)}</span>
+                                             <span>{formatDuration(item.duration)}</span>
+                                          </div>
+                                       </div>
+                                    )}
+                                 </div>
+                              );
+                           })}
                         </div>
                      </div>
                   )}

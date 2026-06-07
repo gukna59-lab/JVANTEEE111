@@ -9,7 +9,7 @@ interface RutubePlayerProps {
   onPlay: (time?: number) => void;
   onPause: (time?: number) => void;
   onSeek: (time: number) => void;
-  onReportProgress: (time: number) => void;
+  onReportProgress: (time: number, duration?: number) => void;
 }
 
 export const RutubePlayer = forwardRef(({
