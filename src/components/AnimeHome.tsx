@@ -692,10 +692,10 @@ export function AnimeHome({ onBack, user, username, avatar }: AnimeHomeProps) {
                                <p className="text-sm text-zinc-500 text-center py-4">Пока нет комментариев. Будьте первым!</p>
                             ) : comments.map((comment: any) => (
                                <div key={comment.id} className="flex gap-3">
-                                  <div className="w-8 h-8 rounded-full bg-bg-hover overflow-hidden shrink-0 border border-border-card">
+                                  <div className={`w-8 h-8 rounded-full bg-bg-hover overflow-hidden shrink-0 border ${comment.isCreator ? 'border-amber-500 ring-1 ring-amber-500/50' : 'border-border-card'}`}>
                                      {comment.avatar ? <img src={comment.avatar} alt="avatar" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-[10px] font-bold">{comment.username?.substring(0,2).toUpperCase()}</div>}
                                   </div>
-                                  <div className="flex-1 bg-bg-card rounded-2xl rounded-tl-sm p-3 border border-border-card">
+                                  <div className={`flex-1 bg-bg-card rounded-2xl rounded-tl-sm p-3 border ${comment.isCreator ? 'border-amber-500/30 bg-amber-500/5' : 'border-border-card'}`}>
                                      <div className="flex items-center justify-between mb-1 opacity-80">
                                         <div className="flex items-center gap-1">
                                           <span className="text-xs font-semibold text-white">{comment.username}</span>

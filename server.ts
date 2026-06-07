@@ -129,7 +129,7 @@ async function startServer() {
       id: room.id,
       name: room.name,
       isPublic: room.isPublic,
-      users: Object.values(room.users).map(u => ({ id: u.id, uid: u.uid, username: u.username, avatar: u.avatar })),
+      users: Object.values(room.users).map(u => ({ id: u.id, uid: u.uid, username: u.username, avatar: u.avatar, isCreator: u.isCreator })),
       userCount: Object.keys(room.users).length,
       videoUrl: room.videoUrl,
       videoTitle: room.videoTitle,

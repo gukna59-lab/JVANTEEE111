@@ -5,7 +5,7 @@ import { Player } from './Player';
 import { Chat } from './Chat';
 import { Logo } from './Lobby';
 import { useVoiceChat } from '../hooks/useVoiceChat';
-import { Mic, MicOff, Smile, Users, X, UserPlus, Globe, Lock, BadgeCheck } from 'lucide-react';
+import { Mic, MicOff, Smile, Users, X, UserPlus, Globe, Lock, BadgeCheck, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface RoomProps {
@@ -262,77 +262,94 @@ export function Room({ roomId, roomName, username, uid, avatar, onLeave, isPubli
   return (
     <div className="flex flex-col h-[100dvh] bg-bg-main text-[#E1E7EF] font-sans overflow-hidden">
       {/* Header Navigation */}
-      <header className="flex items-center justify-between px-4 lg:px-6 py-3 bg-bg-card border-b border-border-card shrink-0">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg overflow-hidden border border-border-card bg-bg-card">
+      <header className="flex items-center justify-between px-3 sm:px-4 lg:px-6 py-2 sm:py-3 bg-bg-card border-b border-border-card shrink-0 overflow-hidden">
+        <div className="flex items-center gap-2 sm:gap-4 shrink overflow-hidden">
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="w-8 h-8 rounded-lg overflow-hidden border border-border-card bg-bg-card shrink-0">
               <Logo />
             </div>
-            <div className="text-xl lg:text-2xl font-black tracking-tighter text-[#3B82F6]">JVANTE</div>
+            <div className="hidden sm:block text-xl lg:text-2xl font-black tracking-tighter text-[#3B82F6]">JVANTE</div>
           </div>
-          <div className="hidden lg:block h-4 w-[1px] bg-[#374151]"></div>
-          <div className="flex flex-col">
-            <h1 className="text-sm font-bold leading-tight truncate max-w-[150px] lg:max-w-md">{roomState.name || `Комната ${roomId}`}</h1>
-            <p className="text-[10px] text-[#94A3B8] uppercase tracking-wider block flex items-center gap-2">
-              <span className="text-[#3B82F6] cursor-pointer hover:underline" onClick={() => navigator.clipboard.writeText(window.location.href)} title="Скопировать ссылку.">ID: {roomId}</span>
-              {roomState.videoTitle && <span>• Смотрят: {roomState.videoTitle}</span>}
+          <div className="hidden lg:block h-4 w-[1px] bg-[#374151] shrink-0"></div>
+          <div className="flex flex-col overflow-hidden">
+            <h1 className="text-sm font-bold leading-tight truncate max-w-[120px] sm:max-w-[200px] lg:max-w-md">{roomState.name || `Комната ${roomId}`}</h1>
+            <p className="text-[10px] text-[#94A3B8] uppercase tracking-wider flex items-center gap-2 truncate">
+              <span className="text-[#3B82F6] cursor-pointer hover:underline shrink-0" onClick={() => navigator.clipboard.writeText(window.location.href)} title="Скопировать ссылку.">ID: {roomId}</span>
+              {roomState.videoTitle && <span className="truncate">• {roomState.videoTitle}</span>}
             </p>
           </div>
         </div>
         
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <button 
              onClick={toggleMic} 
              title={isMicOn ? "Выключить микрофон" : "Голосовой чат"}
-             className={`w-9 h-9 flex items-center justify-center rounded-full border transition-all ${isMicOn ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/50 hover:bg-emerald-500/20' : 'bg-bg-hover text-zinc-400 border-zinc-700 hover:text-white'}`}
+             className={`w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full border transition-all shrink-0 ${isMicOn ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/50 hover:bg-emerald-500/20' : 'bg-bg-hover text-zinc-400 border-zinc-700 hover:text-white'}`}
           >
              {isMicOn ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
           </button>
           
           <div className="hidden lg:flex -space-x-2 mr-2 cursor-pointer relative group" title="Показать участников">
-            {users.slice(0, 3).map((u, i) => (
-              <div key={u.id} title={u.username} className={`w-8 h-8 rounded-full border-2 ${speakingUsers.has(u.id) ? 'border-emerald-500' : 'border-[#11141A]'} flex items-center justify-center text-[10px] font-bold text-white shadow-sm overflow-hidden`} style={{ backgroundColor: u.avatar ? 'transparent' : u.color }}>
-                 {u.avatar ? <img src={u.avatar} alt="avatar" className="w-full h-full object-cover" /> : u.username.substring(0, 2).toUpperCase()}
-              </div>
-            ))}
-            {users.length > 3 && (
-              <div className="w-8 h-8 rounded-full border-2 border-[#11141A] bg-[#6366F1] flex items-center justify-center text-[10px] font-bold text-white shadow-sm">
-                +{users.length - 3}
-              </div>
-            )}
+             {users.slice(0, 3).map((u, i) => (
+               <div key={u.id} className="relative z-10" style={{ zIndex: 10 - i }}>
+                 <div title={u.username} className={`w-8 h-8 rounded-full border-2 ${u.isCreator ? 'border-amber-500 ring-1 ring-amber-500/50' : speakingUsers.has(u.id) ? 'border-emerald-500' : 'border-[#11141A]'} flex items-center justify-center text-[10px] font-bold text-white shadow-sm overflow-hidden shrink-0`} style={{ backgroundColor: u.avatar ? 'transparent' : u.color }}>
+                    {u.avatar ? <img src={u.avatar} alt="avatar" className="w-full h-full object-cover" /> : u.username.substring(0, 2).toUpperCase()}
+                 </div>
+                 {u.isCreator && (
+                   <div className="absolute -top-1 -left-1 w-3.5 h-3.5 bg-amber-500 rounded-full flex items-center justify-center border border-[#11141A] z-20 pointer-events-none">
+                     <BadgeCheck className="w-2.5 h-2.5 text-white" />
+                   </div>
+                 )}
+               </div>
+             ))}
+             {users.length > 3 && (
+               <div className="w-8 h-8 rounded-full border-2 border-[#11141A] bg-[#6366F1] flex items-center justify-center text-[10px] font-bold text-white shadow-sm shrink-0 relative z-0">
+                 +{users.length - 3}
+               </div>
+             )}
             
             {/* Tooltip users list */}
             <div className="absolute top-10 right-0 bg-bg-card border border-border-card p-2 rounded-xl shadow-xl w-48 hidden group-hover:flex flex-col gap-2 z-50">
-              <span className="text-xs text-zinc-500 px-1">Участники лобби:</span>
-              {users.map(u => (
-                <div key={u.id} className="flex items-center gap-2 px-1">
-                  <div className={`w-6 h-6 relative rounded-full overflow-hidden shrink-0 border-2 ${speakingUsers.has(u.id) ? 'border-emerald-500' : 'border-border-card'}`} style={{ backgroundColor: u.avatar ? 'transparent' : u.color }}>
-                     {u.avatar ? <img src={u.avatar} className="w-full h-full object-cover" /> : <span className="w-full h-full flex items-center justify-center text-[8px] font-bold text-white">{u.username.substring(0,2).toUpperCase()}</span>}
-                  </div>
-                  <span className={`text-sm font-medium truncate flex items-center gap-1 ${speakingUsers.has(u.id) ? 'text-emerald-400' : 'text-text-main'}`}>
-                    {u.username}
-                    {u.isCreator && <span title="Верифицированный VIP-аккаунт" className="flex items-center"><BadgeCheck className="w-3.5 h-3.5 text-amber-500" /></span>}
-                  </span>
-                </div>
-              ))}
+               <span className="text-xs text-zinc-500 px-1">Участники лобби:</span>
+               {users.map(u => (
+                 <div key={u.id} className="flex items-center gap-2 px-1">
+                   <div className="relative shrink-0">
+                     <div className={`w-6 h-6 rounded-full overflow-hidden border-2 ${u.isCreator ? 'border-amber-500 ring-1 ring-amber-500/50' : speakingUsers.has(u.id) ? 'border-emerald-500' : 'border-border-card'}`} style={{ backgroundColor: u.avatar ? 'transparent' : u.color }}>
+                        {u.avatar ? <img src={u.avatar} className="w-full h-full object-cover" /> : <span className="w-full h-full flex items-center justify-center text-[8px] font-bold text-white">{u.username.substring(0,2).toUpperCase()}</span>}
+                     </div>
+                     {u.isCreator && (
+                       <div className="absolute -top-1 -left-1 w-3 h-3 bg-amber-500 rounded-full flex items-center justify-center border border-[#11141A] z-10 pointer-events-none">
+                         <BadgeCheck className="w-2 h-2 text-white" />
+                       </div>
+                     )}
+                   </div>
+                   <span className={`text-sm font-medium truncate flex items-center gap-1 ${speakingUsers.has(u.id) ? 'text-emerald-400' : 'text-text-main'}`}>
+                     {u.username}
+                   </span>
+                 </div>
+               ))}
             </div>
           </div>
-          <button onClick={onLeave} className="px-3 py-1.5 bg-bg-hover hover:bg-[#334155] text-xs font-semibold rounded border border-[#374151] flex items-center gap-2 transition-colors">
-            <span>Выйти</span>
+
+          <button onClick={onLeave} className="px-2 sm:px-3 py-1.5 bg-bg-hover hover:bg-[#334155] text-xs font-semibold rounded border border-[#374151] flex items-center justify-center gap-2 transition-colors shrink-0" title="Выйти">
+            <span className="hidden sm:inline">Выйти</span>
+            <span className="sm:hidden"><LogOut className="w-4 h-4" /></span>
           </button>
           
           <button 
-            className="px-3 py-1.5 bg-[#3B82F6] hover:bg-[#2563EB] text-xs font-semibold rounded text-white transition-colors" 
-            onClick={() => {
-               if (uid) {
-                  setShowInviteModal(true);
-               } else {
-                  navigator.clipboard.writeText(window.location.href);
-                  alert("Ссылка скопирована!");
-               }
-            }}
+             className="px-2 sm:px-3 py-1.5 bg-[#3B82F6] hover:bg-[#2563EB] text-xs font-semibold rounded text-white flex items-center justify-center transition-colors shrink-0" 
+             onClick={() => {
+                if (uid) {
+                   setShowInviteModal(true);
+                } else {
+                   navigator.clipboard.writeText(window.location.href);
+                   alert("Ссылка скопирована!");
+                }
+             }}
+             title="Пригласить"
           >
-            Пригласить
+             <span className="hidden sm:inline">Пригласить</span>
+             <span className="sm:hidden"><UserPlus className="w-4 h-4" /></span>
           </button>
         </div>
       </header>

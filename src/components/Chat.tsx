@@ -192,18 +192,25 @@ export function Chat({ messages, onSendMessage, onAvatarClick }: ChatProps) {
                 </span>
               ) : (
                 <div className="flex gap-2 w-full">
-                  <div 
-                    className="w-8 h-8 rounded-full flex-shrink-0 overflow-hidden border border-[#374151] cursor-pointer" 
-                    style={{ backgroundColor: msg.color }}
-                    onClick={() => typeof onAvatarClick === 'function' && onAvatarClick({ uid: msg.userUid || msg.userId, username: msg.username, avatar: msg.avatar, isCreator: msg.isCreator })}
-                  >
-                     {msg.avatar ? (
-                       <img src={msg.avatar} alt="avatar" className="w-full h-full object-cover" />
-                     ) : (
-                       <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-white">
-                         {msg.username.substring(0,2).toUpperCase()}
+                  <div className="relative">
+                    <div 
+                      className={`w-8 h-8 rounded-full flex-shrink-0 overflow-hidden border cursor-pointer ${msg.isCreator ? 'border-amber-500 ring-1 ring-amber-500/50' : 'border-[#374151]'}`} 
+                      style={{ backgroundColor: msg.color }}
+                      onClick={() => typeof onAvatarClick === 'function' && onAvatarClick({ uid: msg.userUid || msg.userId, username: msg.username, avatar: msg.avatar, isCreator: msg.isCreator })}
+                    >
+                       {msg.avatar ? (
+                         <img src={msg.avatar} alt="avatar" className="w-full h-full object-cover" />
+                       ) : (
+                         <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-white">
+                           {msg.username.substring(0,2).toUpperCase()}
+                         </div>
+                       )}
+                    </div>
+                    {msg.isCreator && (
+                       <div className="absolute -top-1 -left-1 w-3.5 h-3.5 bg-amber-500 rounded-full flex items-center justify-center border border-[#11141A] z-10 pointer-events-none">
+                          <BadgeCheck className="w-2.5 h-2.5 text-white" />
                        </div>
-                     )}
+                    )}
                   </div>
                   <div className="flex flex-col flex-1 min-w-0">
                     <div className="flex items-center gap-1 mb-1">

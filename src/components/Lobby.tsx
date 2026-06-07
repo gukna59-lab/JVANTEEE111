@@ -490,9 +490,14 @@ export function Lobby({ onJoin, onWatchAnime, user, defaultUsername, defaultAvat
       <header className="w-full max-w-4xl px-4 py-6 flex items-center justify-between z-10">
         <button onClick={() => setActiveModal('profile')} className="flex items-center gap-3 hover:bg-bg-card p-2 rounded-2xl transition-colors text-left outline-none">
           <div className="relative">
-             <div className="w-12 h-12 bg-bg-card rounded-2xl flex items-center justify-center border border-border-card overflow-hidden">
+             <div className={`w-12 h-12 bg-bg-card rounded-2xl flex items-center justify-center border overflow-hidden ${user?.isCreator ? 'border-amber-500 ring-2 ring-amber-500/50' : 'border-border-card'}`}>
                {avatar ? <img src={avatar} alt="avatar" className="w-full h-full object-cover" /> : <Logo />}
              </div>
+             {user?.isCreator && (
+               <div className="absolute -top-2 -left-2 w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center border-2 border-[#0A0C10] shadow-sm z-10 pointer-events-none">
+                 <BadgeCheck className="w-4 h-4 text-white" />
+               </div>
+             )}
              {country && (
                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-[#1F2937] rounded-full flex items-center justify-center text-[12px] border-2 border-[#0A0C10] overflow-hidden leading-none shadow-sm">
                  {generateFlagEmoji(country)}
@@ -562,9 +567,16 @@ export function Lobby({ onJoin, onWatchAnime, user, defaultUsername, defaultAvat
                       <p className="text-xs text-zinc-500">{room.userCount} {room.userCount === 1 ? 'зритель' : 'зрителей'}</p>
                       <div className="flex -space-x-2">
                          {room.users.slice(0, 5).map((u: any, i: number) => (
-                           <button onClick={(e) => { e.stopPropagation(); openUserProfile(u.uid); }} key={i} title={`${u.username} (${getStablePing(u.uid)} мс)`} className="w-6 h-6 rounded-full border-2 border-bg-card bg-bg-hover overflow-hidden flex items-center justify-center z-10 hover:scale-110 transition-transform" style={{ zIndex: 10 - i }}>
-                             {u.avatar ? <img src={u.avatar} className="w-full h-full object-cover" /> : <span className="text-[8px] font-bold text-text-muted">{u.username.substring(0, 2).toUpperCase()}</span>}
-                           </button>
+                           <div key={i} className="relative z-10 hover:scale-110 transition-transform" style={{ zIndex: 10 - i }}>
+                             <button onClick={(e) => { e.stopPropagation(); openUserProfile(u.uid); }} title={`${u.username} (${getStablePing(u.uid)} мс)`} className={`w-6 h-6 rounded-full border-2 ${u.isCreator ? 'border-amber-500 ring-1 ring-amber-500/50' : 'border-bg-card'} bg-bg-hover overflow-hidden flex items-center justify-center`}>
+                               {u.avatar ? <img src={u.avatar} className="w-full h-full object-cover" /> : <span className="text-[8px] font-bold text-text-muted">{u.username.substring(0, 2).toUpperCase()}</span>}
+                             </button>
+                             {u.isCreator && (
+                               <div className="absolute -top-1 -left-1 w-3 h-3 bg-amber-500 rounded-full flex items-center justify-center border border-[#11141A] z-20 pointer-events-none">
+                                 <BadgeCheck className="w-2 h-2 text-white" />
+                               </div>
+                             )}
+                           </div>
                          ))}
                          {room.users.length > 5 && (
                            <div className="w-6 h-6 rounded-full border-2 border-bg-card bg-[#3B82F6] flex items-center justify-center text-[8px] font-bold text-white z-0">
@@ -731,7 +743,7 @@ export function Lobby({ onJoin, onWatchAnime, user, defaultUsername, defaultAvat
                         <div className="bg-blue-500/10 border border-blue-500/30 p-4 rounded-xl flex items-center justify-between">
                            <div className="flex-1 min-w-0 pr-2">
                               <p className="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-1 flex items-center gap-1"><PlaySquare className="w-3 h-3" /> Смотрит сейчас</p>
-                              <p className="text-sm font-medium text-white truncate w-full">{uRoom.videoTitle || 'В лобби без видео'}</p>
+                              <p className="text-sm font-medium text-zinc-200 truncate w-full">{uRoom.videoTitle || 'В лобби без видео'}</p>
                               <p className="text-xs text-zinc-400 mt-1 truncate">Комната: {uRoom.name || uRoom.id}</p>
                            </div>
                            <button onClick={() => { setActiveModal(null); onJoin(username, uRoom.id, avatar, uRoom.isPublic, uRoom.name); }} className="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-colors shrink-0 shadow-lg shadow-blue-500/25">
@@ -883,12 +895,19 @@ export function Lobby({ onJoin, onWatchAnime, user, defaultUsername, defaultAvat
                           const isOnline = onlineUsersMap.includes(friend.uid);
                           return (
                           <div key={friend.uid} className="flex items-center justify-between p-3 bg-bg-main rounded-xl border border-border-card">
-                            <button onClick={() => openUserProfile(friend.uid)} className="flex items-center gap-3 relative hover:opacity-80 transition-opacity outline-none text-left flex-1 min-w-0">
-                               <div className="w-8 h-8 rounded-full bg-bg-hover overflow-hidden shrink-0">
-                                  {friend.avatar ? <img src={friend.avatar} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-[10px] font-bold">{friend.username.substring(0,2).toUpperCase()}</div>}
+                            <button onClick={() => openUserProfile(friend.uid)} className="flex items-center gap-3 hover:opacity-80 transition-opacity outline-none text-left flex-1 min-w-0">
+                               <div className="relative shrink-0">
+                                 <div className={`w-8 h-8 rounded-full bg-bg-hover overflow-hidden border ${friend.isCreator ? 'border-amber-500 ring-1 ring-amber-500/50' : 'border-border-card'}`}>
+                                    {friend.avatar ? <img src={friend.avatar} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-[10px] font-bold">{friend.username.substring(0,2).toUpperCase()}</div>}
+                                 </div>
+                                 <div className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border border-[#0A0C10] ${isOnline ? 'bg-emerald-500' : 'bg-zinc-500'}`} title={isOnline ? 'Онлайн' : 'Оффлайн'}></div>
+                                 {friend.isCreator && (
+                                   <div className="absolute -top-1 -left-1 w-3.5 h-3.5 bg-amber-500 rounded-full flex items-center justify-center border border-[#11141A] z-10 pointer-events-none">
+                                     <BadgeCheck className="w-2.5 h-2.5 text-white" />
+                                   </div>
+                                 )}
                                </div>
-                               <div className={`absolute bottom-0 left-6 w-2.5 h-2.5 rounded-full border border-[#0A0C10] ${isOnline ? 'bg-emerald-500' : 'bg-zinc-500'}`} title={isOnline ? 'Онлайн' : 'Оффлайн'}></div>
-                               <span className="text-sm font-medium text-white truncate flex items-center gap-1">{friend.username} {friend.isCreator && <BadgeCheck className="w-4 h-4 text-amber-500" />}</span>
+                               <span className="text-sm font-medium truncate flex flex-1 items-center gap-1">{friend.username}</span>
                             </button>
                           </div>
                         )})}
@@ -905,8 +924,15 @@ export function Lobby({ onJoin, onWatchAnime, user, defaultUsername, defaultAvat
                     {searchResult && (
                       <div className="flex items-center justify-between p-3 bg-bg-main rounded-xl border border-pink-500/30">
                          <button onClick={() => openUserProfile(searchResult.uid || searchResult.id)} className="flex items-center gap-3 hover:opacity-80 transition-opacity outline-none text-left flex-1 min-w-0">
-                             <div className="w-8 h-8 rounded-full bg-bg-hover overflow-hidden shrink-0">
-                                {searchResult.avatar ? <img src={searchResult.avatar} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-[10px] font-bold">{searchResult.username.substring(0,2).toUpperCase()}</div>}
+                             <div className="relative shrink-0">
+                               <div className={`w-8 h-8 rounded-full bg-bg-hover overflow-hidden border ${searchResult.isCreator ? 'border-amber-500 ring-1 ring-amber-500/50' : 'border-border-card'}`}>
+                                  {searchResult.avatar ? <img src={searchResult.avatar} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-[10px] font-bold">{searchResult.username.substring(0,2).toUpperCase()}</div>}
+                               </div>
+                               {searchResult.isCreator && (
+                                 <div className="absolute -top-1 -left-1 w-3.5 h-3.5 bg-amber-500 rounded-full flex items-center justify-center border border-[#11141A] z-10 pointer-events-none">
+                                   <BadgeCheck className="w-2.5 h-2.5 text-white" />
+                                 </div>
+                               )}
                              </div>
                              <span className="text-sm font-medium truncate">{searchResult.username}</span>
                          </button>
