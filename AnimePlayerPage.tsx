@@ -81,10 +81,10 @@ export const AnimePlayerPage: React.FC<AnimePlayerPageProps> = ({
 
   if (loading) {
     return (
-      <div className="w-full h-screen flex items-center justify-center bg-black">
+      <div className="w-full h-screen flex items-center justify-center bg-bg-main">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
-          <p className="text-white mt-4">Загрузка плеера...</p>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <p className="text-text-main mt-4">Загрузка плеера...</p>
         </div>
       </div>
     );
@@ -92,13 +92,13 @@ export const AnimePlayerPage: React.FC<AnimePlayerPageProps> = ({
 
   if (error) {
     return (
-      <div className="w-full h-screen flex items-center justify-center bg-black">
+      <div className="w-full h-screen flex items-center justify-center bg-bg-main">
         <div className="text-center">
           <div className="text-red-500 text-xl mb-4">⚠️ Ошибка</div>
-          <p className="text-white">{error}</p>
+          <p className="text-text-main">{error}</p>
           <button
             onClick={fetchPlayerUrl}
-            className="mt-6 px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded transition-colors"
+            className="mt-6 px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors"
           >
             Попробовать снова
           </button>
@@ -108,11 +108,11 @@ export const AnimePlayerPage: React.FC<AnimePlayerPageProps> = ({
   }
 
   return (
-    <div className="w-full bg-black min-h-screen">
+    <div className="w-full bg-bg-main min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="mb-6">
-          <h1 className="text-white text-3xl font-bold mb-2">{animeTitle}</h1>
-          <p className="text-gray-400">Серия {episode}</p>
+          <h1 className="text-text-main text-3xl font-bold mb-2">{animeTitle}</h1>
+          <p className="text-text-muted">Серия {episode}</p>
         </div>
 
         {playerUrl && (
@@ -131,24 +131,24 @@ export const AnimePlayerPage: React.FC<AnimePlayerPageProps> = ({
         )}
 
         {/* Additional Info */}
-        <div className="bg-gray-900 rounded-lg p-6 text-white">
+        <div className="bg-bg-card border border-border-card rounded-lg p-6 text-text-main">
           <h2 className="text-xl font-bold mb-4">Информация</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <p className="text-gray-400">Название</p>
-              <p className="text-white font-semibold">{animeTitle}</p>
+              <p className="text-text-muted">Название</p>
+              <p className="text-text-main font-semibold">{animeTitle}</p>
             </div>
             <div>
-              <p className="text-gray-400">Текущая серия</p>
-              <p className="text-white font-semibold">{episode}</p>
+              <p className="text-text-muted">Текущая серия</p>
+              <p className="text-text-main font-semibold">{episode}</p>
             </div>
             <div>
-              <p className="text-gray-400">Доступное качество</p>
-              <p className="text-white font-semibold">{availableQualities.join(', ')}p</p>
+              <p className="text-text-muted">Доступное качество</p>
+              <p className="text-text-main font-semibold">{availableQualities.join(', ')}p</p>
             </div>
             <div>
-              <p className="text-gray-400">Выбранное качество</p>
-              <p className="text-white font-semibold">{selectedQuality}p</p>
+              <p className="text-text-muted">Выбранное качество</p>
+              <p className="text-text-main font-semibold">{selectedQuality}p</p>
             </div>
           </div>
         </div>

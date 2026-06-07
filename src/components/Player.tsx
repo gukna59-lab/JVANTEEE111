@@ -522,7 +522,7 @@ function VideoPlaceholder({ isAdmin, inputUrl, setInputUrl, handleUrlSubmit }: a
         <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border border-white/20">
           <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-white border-b-[12px] border-b-transparent ml-2"></div>
         </div>
-        <h2 className="text-xl font-bold tracking-tight text-white">Load Video</h2>
+        <h2 className="text-xl font-bold tracking-tight text-text-main">Load Video</h2>
         <p className="text-xs text-[#94A3B8] mb-4">Paste URL in the bottom panel</p>
       </div>
     );
@@ -533,7 +533,7 @@ function VideoPlaceholder({ isAdmin, inputUrl, setInputUrl, handleUrlSubmit }: a
       <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse border border-white/10 group">
          <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-white/50 border-b-[12px] border-b-transparent ml-2"></div>
       </div>
-      <h2 className="text-xl font-bold tracking-tight text-white">Ожидание администратора...</h2>
+      <h2 className="text-xl font-bold tracking-tight text-text-main">Ожидание администратора...</h2>
       <p className="text-xs text-[#94A3B8]">Администратор должен начать воспроизведение видео.</p>
     </div>
   );

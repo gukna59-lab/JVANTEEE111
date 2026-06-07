@@ -263,7 +263,7 @@ export function Room({ roomId, roomName, username, uid, avatar, onLeave, isPubli
     <div className="flex flex-col h-[100dvh] bg-bg-main text-[#E1E7EF] font-sans overflow-hidden">
       {/* Header Navigation */}
       <header className="flex items-center justify-between px-3 sm:px-4 lg:px-6 py-2 sm:py-3 bg-bg-card border-b border-border-card shrink-0 overflow-hidden">
-        <div className="flex items-center gap-2 sm:gap-4 shrink overflow-hidden">
+        <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0 overflow-hidden">
           <div className="flex items-center gap-2 shrink-0">
             <div className="w-8 h-8 rounded-lg overflow-hidden border border-border-card bg-bg-card shrink-0">
               <Logo />
@@ -271,8 +271,8 @@ export function Room({ roomId, roomName, username, uid, avatar, onLeave, isPubli
             <div className="hidden sm:block text-xl lg:text-2xl font-black tracking-tighter text-[#3B82F6]">JVANTE</div>
           </div>
           <div className="hidden lg:block h-4 w-[1px] bg-[#374151] shrink-0"></div>
-          <div className="flex flex-col overflow-hidden">
-            <h1 className="text-sm font-bold leading-tight truncate max-w-[120px] sm:max-w-[200px] lg:max-w-md">{roomState.name || `Комната ${roomId}`}</h1>
+          <div className="flex flex-col overflow-hidden flex-1 min-w-0">
+            <h1 className="text-sm font-bold leading-tight truncate">{roomState.name || `Комната ${roomId}`}</h1>
             <p className="text-[10px] text-[#94A3B8] uppercase tracking-wider flex items-center gap-2 truncate">
               <span className="text-[#3B82F6] cursor-pointer hover:underline shrink-0" onClick={() => navigator.clipboard.writeText(window.location.href)} title="Скопировать ссылку.">ID: {roomId}</span>
               {roomState.videoTitle && <span className="truncate">• {roomState.videoTitle}</span>}
@@ -280,7 +280,7 @@ export function Room({ roomId, roomName, username, uid, avatar, onLeave, isPubli
           </div>
         </div>
         
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-1 sm:gap-3 shrink-0">
           <button 
              onClick={toggleMic} 
              title={isMicOn ? "Выключить микрофон" : "Голосовой чат"}
@@ -452,7 +452,7 @@ export function Room({ roomId, roomName, username, uid, avatar, onLeave, isPubli
 
         <AnimatePresence>
           {viewingUser && (
-            <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}

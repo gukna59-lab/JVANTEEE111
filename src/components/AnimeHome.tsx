@@ -294,7 +294,7 @@ export function AnimeHome({ onBack, user, username, avatar }: AnimeHomeProps) {
             <div className="flex items-center gap-4 ml-auto">
                <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-zinc-400">
                   <button onClick={() => { setSelectedAnime(null); setFilter('Все'); }} className="hover:text-white transition-colors">Главная</button>
-                  <button onClick={() => { setSelectedAnime(null); setFilter('Все'); }} className="text-white">Аниме</button>
+                  <button onClick={() => { setSelectedAnime(null); setFilter('Все'); }} className="text-text-main">Аниме</button>
                   <button onClick={() => { setSelectedAnime(null); setFilter('Все'); }} className="hover:text-white transition-colors">Топ-100</button>
                   <button onClick={handleRandomAnime} className="hover:text-white transition-colors">Случайное</button>
                </nav>
@@ -363,7 +363,7 @@ export function AnimeHome({ onBack, user, username, avatar }: AnimeHomeProps) {
                          </div>
 
                          <div className="p-4 flex-1 flex flex-col justify-end bg-bg-card">
-                            <h3 className="font-bold text-sm leading-tight line-clamp-2 text-white mb-2">{anime.title}</h3>
+                            <h3 className="font-bold text-sm leading-tight line-clamp-2 text-text-main mb-2">{anime.title}</h3>
                             <div className="flex items-center justify-between text-xs text-zinc-500 font-medium mt-auto">
                                <span>IMDb</span>
                                <span>#{anime.rank} в рейтинге</span>
@@ -428,18 +428,18 @@ export function AnimeHome({ onBack, user, username, avatar }: AnimeHomeProps) {
                    <div className="space-y-3 text-sm font-medium">
                       <div className="flex justify-between items-center border-b border-border-card pb-2">
                          <span className="text-zinc-400">Вкладок открыто:</span>
-                         <span className="text-white">0</span>
+                         <span className="text-text-main">0</span>
                       </div>
                       <div className="flex justify-between items-center border-b border-border-card pb-2">
                          <span className="text-zinc-400">Пользователей:</span>
                          <div className="flex items-center gap-2">
-                           <span className="text-white">0</span>
+                           <span className="text-text-main">0</span>
                            <span className="flex items-center gap-1 text-emerald-400"><div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div> 1</span>
                          </div>
                       </div>
                       <div className="flex justify-between items-center border-b border-border-card pb-2">
                          <span className="text-zinc-400">Аниме в базе:</span>
-                         <span className="text-white">{animeData.length}</span>
+                         <span className="text-text-main">{animeData.length}</span>
                       </div>
                    </div>
                 </div>
@@ -482,11 +482,11 @@ export function AnimeHome({ onBack, user, username, avatar }: AnimeHomeProps) {
                          </div>
                          <div className="flex justify-between items-center">
                             <span className="text-zinc-400 flex items-center gap-2"><Tv className="w-4 h-4" /> Эпизоды</span>
-                            <span className="text-white">{availableEpisodes.length}</span>
+                            <span className="text-text-main">{availableEpisodes.length}</span>
                          </div>
                          <div className="flex justify-between items-center">
                             <span className="text-zinc-400 flex items-center gap-2"><TrendingUp className="w-4 h-4" /> Топ</span>
-                            <span className="text-white">#{selectedAnime.rank}</span>
+                            <span className="text-text-main">#{selectedAnime.rank}</span>
                          </div>
                       </div>
                    </div>
@@ -495,7 +495,7 @@ export function AnimeHome({ onBack, user, username, avatar }: AnimeHomeProps) {
                 {/* Main Content Area */}
                 <div className="flex-1 flex flex-col gap-8">
                    <div className="bg-bg-card rounded-3xl border border-border-card p-6 lg:p-8">
-                      <h1 className="text-3xl lg:text-4xl font-black text-white mb-4">{selectedAnime.title}</h1>
+                      <h1 className="text-3xl lg:text-4xl font-black text-text-main mb-4">{selectedAnime.title}</h1>
                       <div className="prose prose-invert max-w-none mb-8">
                          <h3 className="text-lg font-bold text-zinc-300 mb-2">Сюжет</h3>
                          <p className="text-zinc-400 leading-relaxed">
@@ -614,7 +614,7 @@ export function AnimeHome({ onBack, user, username, avatar }: AnimeHomeProps) {
                            <div className="absolute inset-x-4 bottom-4 z-20 rounded-2xl border border-blue-500/30 bg-bg-main/90 p-4 backdrop-blur-xl shadow-2xl">
                              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                                <div>
-                                 <div className="text-sm font-bold text-white">Если встроенный плеер не открылся</div>
+                                 <div className="text-sm font-bold text-text-main">Если встроенный плеер не открылся</div>
                                  <div className="text-xs text-zinc-400 mt-1">Источник может блокировать iframe на localhost. Откройте плеер в новой вкладке.</div>
                                </div>
                                <div className="flex flex-wrap gap-2">
@@ -653,7 +653,7 @@ export function AnimeHome({ onBack, user, username, avatar }: AnimeHomeProps) {
 
                       {/* Comments Section */}
                       <div className="p-6 bg-bg-main">
-                         <h4 className="text-lg font-bold text-white mb-4">Комментарии к серии</h4>
+                         <h4 className="text-lg font-bold text-text-main mb-4">Комментарии к серии</h4>
                          <form onSubmit={handlePostComment} className="flex gap-3 mb-6">
                             <div className="w-10 h-10 rounded-full bg-bg-hover overflow-hidden shrink-0 border border-border-card">
                                {avatar ? <img src={avatar} alt="avatar" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-xs font-bold">{username?.substring(0,2).toUpperCase()}</div>}
@@ -692,13 +692,20 @@ export function AnimeHome({ onBack, user, username, avatar }: AnimeHomeProps) {
                                <p className="text-sm text-zinc-500 text-center py-4">Пока нет комментариев. Будьте первым!</p>
                             ) : comments.map((comment: any) => (
                                <div key={comment.id} className="flex gap-3">
-                                  <div className={`w-8 h-8 rounded-full bg-bg-hover overflow-hidden shrink-0 border ${comment.isCreator ? 'border-amber-500 ring-1 ring-amber-500/50' : 'border-border-card'}`}>
-                                     {comment.avatar ? <img src={comment.avatar} alt="avatar" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-[10px] font-bold">{comment.username?.substring(0,2).toUpperCase()}</div>}
+                                  <div className="relative shrink-0">
+                                     <div className={`w-8 h-8 rounded-full bg-bg-hover overflow-hidden border ${comment.isCreator ? 'border-amber-500 ring-1 ring-amber-500/50' : 'border-border-card'}`}>
+                                        {comment.avatar ? <img src={comment.avatar} alt="avatar" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-[10px] font-bold">{comment.username?.substring(0,2).toUpperCase()}</div>}
+                                     </div>
+                                     {comment.isCreator && (
+                                        <div className="absolute -top-1 -left-1 w-3.5 h-3.5 bg-amber-500 rounded-full flex items-center justify-center border border-[#11141A] z-10 pointer-events-none">
+                                           <BadgeCheck className="w-2.5 h-2.5 text-white" />
+                                        </div>
+                                     )}
                                   </div>
                                   <div className={`flex-1 bg-bg-card rounded-2xl rounded-tl-sm p-3 border ${comment.isCreator ? 'border-amber-500/30 bg-amber-500/5' : 'border-border-card'}`}>
                                      <div className="flex items-center justify-between mb-1 opacity-80">
                                         <div className="flex items-center gap-1">
-                                          <span className="text-xs font-semibold text-white">{comment.username}</span>
+                                          <span className="text-xs font-semibold text-text-main">{comment.username}</span>
                                           {comment.isCreator && <span title="Верифицированный VIP-аккаунт" className="flex items-center"><BadgeCheck className="w-3.5 h-3.5 text-amber-500" /></span>}
                                         </div>
                                         <span className="text-[10px] text-zinc-500">{new Date(comment.timestamp || comment.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
